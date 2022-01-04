@@ -11,8 +11,9 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        createVFL()
-        createAnchors()
+        //        createVFL()
+        //        createAnchors()
+        createStackView()
     }
     
     override var representedObject: Any? {
@@ -49,7 +50,7 @@ class ViewController: NSViewController {
         }
         // add another set of constraints that cause the views to be aligned vertically, one above the other
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view0]-[view1]-[view2]-[view3]|", options: [],metrics: nil, views: textFields))
-    
+        
     }
     
     func createAnchors() {
@@ -57,7 +58,7 @@ class ViewController: NSViewController {
         var previous: NSView!
         
         // create four views and put them into an array
-           let views = [makeView(0), makeView(1), makeView(2),makeView(3)]
+        let views = [makeView(0), makeView(1), makeView(2),makeView(3)]
         
         for vw in views {
             // add this child to our main view, making it fill the horizontal space and be 88 points high
@@ -82,5 +83,31 @@ class ViewController: NSViewController {
         previous.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         
     }
-}
+    
+    func createStackView() {
+        // create a stack view from four text fields
+        let stackView = NSStackView(views: [makeView(0), makeView(1), makeView(2), makeView(3)])
         
+        // make them take up an equal amount of space
+        stackView.distribution = .fillEqually
+        
+        // make the views line up vertically
+        stackView.orientation = .vertical
+        
+        // set this to false so we can create our own Auto Layout constraints
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        view.addSubview(stackView)
+        for view in stackView.arrangedSubviews {
+            view.setContentHuggingPriority(NSLayoutConstraint.Priority(1), for: .horizontal)
+            view.setContentHuggingPriority(NSLayoutConstraint.Priority(1), for: .vertical)
+        }
+        
+        // make the stack view sit directly against all four edges
+        stackView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        stackView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
+        stackView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        stackView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+    }
+    
+}
+
