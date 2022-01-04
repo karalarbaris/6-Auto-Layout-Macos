@@ -11,7 +11,8 @@ class ViewController: NSViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        createVFL()
+//        createVFL()
+        createAnchors()
     }
     
     override var representedObject: Any? {
@@ -49,6 +50,37 @@ class ViewController: NSViewController {
         // add another set of constraints that cause the views to be aligned vertically, one above the other
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[view0]-[view1]-[view2]-[view3]|", options: [],metrics: nil, views: textFields))
     
+    }
+    
+    func createAnchors() {
+        // create a var to track the previous view we placed
+        var previous: NSView!
+        
+        // create four views and put them into an array
+           let views = [makeView(0), makeView(1), makeView(2),makeView(3)]
+        
+        for vw in views {
+            // add this child to our main view, making it fill the horizontal space and be 88 points high
+            view.addSubview(vw)
+            vw.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+            vw.heightAnchor.constraint(equalToConstant: 88).isActive = true
+            vw.leadingAnchor.constraint(equalTo:view.leadingAnchor).isActive = true
+            
+            if previous != nil {
+                // we have a previous view, position it 10 points vertivally away from it
+                vw.topAnchor.constraint(equalTo: previous.bottomAnchor, constant: 10).isActive = true
+            } else {
+                // we don't have a previous view, position is against the top edge
+                vw.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+            }
+            
+            // set the previous view to current
+            previous = vw
+            
+        }
+        //make the final view sit against the bottom edge of our main view
+        previous.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        
     }
 }
         
